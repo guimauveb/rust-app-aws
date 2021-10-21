@@ -1,0 +1,32 @@
+[package]
+name = "rust-app-backend"
+version = "0.1.0"
+authors = ["guimauve <contact@guimauve.io>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "2.0.0"
+actix-files = "0.2.2"
+actix-cors = "0.2.0"
+actix-rt = "1.0.0"
+actix-service = "1.0.1"
+chrono = { version = "0.4.10", features = ["serde"] }
+derive_more = "0.99.2"
+diesel = { version = "1.4.8", features = ["postgres","uuidv07", "r2d2", "chrono"] }
+r2d2 = "0.8.8"
+serde = "1.0"
+serde_derive = "1.0"
+serde_json = "1.0"
+uuid = { version = "0.8", features = ["serde", "v4"] } # Might no be needed for the purpose of the tutorial
+dotenv_codegen = "0.15.0"
+
+[profile.release]
+opt-level = 3
+# Less code to include into binary
+panic = 'abort'
+# Optimization over all codebase ( better optimization, slower build )
+codegen-units = 1
+# Link time optimization using using whole-program analysis
+lto = true

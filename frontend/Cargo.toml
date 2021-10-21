@@ -1,0 +1,51 @@
+[package]
+name = "rust-app-frontend"
+version = "0.0.1"
+authors = ["guimauve <contact@guimauve.io>"]
+edition = "2018"
+
+[dependencies]
+yew = { rev="d1f15b6f862d555023c18a48c5fb154e539be22b", git = "https://github.com/yewstack/yew"}
+yew-functional = { rev="d1f15b6f862d555023c18a48c5fb154e539be22b",  git = "https://github.com/yewstack/yew"}
+yew-router = { rev="d1f15b6f862d555023c18a48c5fb154e539be22b",  git = "https://github.com/yewstack/yew"}
+
+log = { version = "0.4.5", features = ["std"] }
+chrono = { version = "0.4.10", features = ["wasmbind", "serde"] }
+wasm-logger = "0.2.0"
+wee_alloc = "0.4.5"
+wasm-bindgen = { version = "0.2.78", features = ["serde-serialize"] }
+wasm-bindgen-futures = "0.4.20"
+serde = { version = "1.0.80", features = ["derive"] }
+dotenv_codegen = "0.15.0"
+
+[dependencies.web-sys]
+version = "0.3.4"
+features = [
+  "Document",
+  "Element",
+  "HtmlCollection",
+  "HtmlElement",
+  'Window',
+  'ScrollToOptions',
+  'HtmlDocument',
+  'Headers',
+  'Request',
+  'RequestInit',
+  'RequestMode',
+  'RequestRedirect',
+  'Response',
+]
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.14"
+
+[profile.release]
+# Less code to include into binary
+panic = 'abort'
+# Optimization over all codebase ( better optimization, slower build )
+codegen-units = 1
+# Optimization for size ( most aggressive )
+opt-level = 'z'
+# Link time optimization using using whole-program analysis
+lto = true
+
