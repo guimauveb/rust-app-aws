@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS articles
    title         TEXT NOT NULL,
    pub_date      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
    published     BOOLEAN NOT NULL DEFAULT FALSE,
-   preview       TEXT NOT NULL,
+   headline      TEXT NOT NULL,
    image         TEXT NOT NULL,
    content       TEXT NOT NULL
 );

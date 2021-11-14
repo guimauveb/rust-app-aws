@@ -51,7 +51,7 @@ pub fn article(ArticleProps { id }: &ArticleProps) -> Html {
                             }}
                         </div>
                         <img style="margin-top: 8px; margin-bottom:8px; align-self: center;" width="77%" src={&article.image} />
-                        <h3 style="margin-top:8px; margin-bottom:8px;">{&article.preview} </h3>
+                        <h3 style="margin-top:8px; margin-bottom:8px;">{&article.headline} </h3>
                         <p>{&article.content}</p>
                     </div>
                 </div>

@@ -10,7 +10,7 @@ public_url = "/"
 
 [serve]
 # The port to serve on.
-port = 3000
+port = 3001
 # Open a browser tab once the initial build is complete.
 open = false
 # Disable auto-reload of the web app.

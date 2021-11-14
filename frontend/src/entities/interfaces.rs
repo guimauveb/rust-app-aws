@@ -13,7 +13,7 @@ pub struct IArticle {
     pub title: String,
     pub pub_date: String,
     pub published: bool,
-    pub preview: String,
+    pub headline: String,
     pub image: String,
     pub content: String,
 }

@@ -11,8 +11,8 @@ use {
     diesel::PgConnection,
 };
 
+mod errors;
 mod handlers;
-mod interfaces;
 mod models;
 mod schema;
 
@@ -22,7 +22,7 @@ const DATABASE_URL: &str = dotenv!("DATABASE_URL");
 
 pub type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
 
-#[actix_rt::main]
+#[actix_web::main]
 async fn main() -> std::io::Result<()> {
     #[cfg(debug_assertions)]
     std::env::set_var("RUST_LOG", "actix_web=debug");
@@ -35,34 +35,23 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .wrap(
-                Cors::new()
-                    .allowed_origin("http://localhost:3000")
+                Cors::default()
+                    .allowed_origin("http://localhost:3001")
                     .allowed_origin("http://localhost:3333")
                     .allowed_origin("http://127.0.0.1:3000")
-                    .allowed_origin("http://www.your-domain.com")
                     .allowed_origin("https://www.your-domain.com")
-                    .allowed_origin("http://your-domain.com")
                     .allowed_origin("https://your-domain.com")
-                    .allowed_headers(vec![
-                        http::header::AUTHORIZATION,
-                        http::header::ACCEPT,
-                        http::header::CONTENT_TYPE,
-                    ])
-                    .max_age(3600)
-                    .finish(),
+                    .allowed_methods(vec!["GET", "OPTIONS"])
+                    .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+                    .allowed_header(http::header::CONTENT_TYPE)
+                    .max_age(3600),
             )
             .service(fs::Files::new("/media", "./media").show_files_listing())
             .data(pool.clone())
-            .route(
-                "/articles/{id}",
-                web::get().to(handlers::articles::get_article_by_id),
-            )
-            .route(
-                "/articles",
-                web::get().to(handlers::articles::get_all_articles),
-            )
+            .route("/articles/{id}", web::get().to(handlers::articles::get))
+            .route("/articles", web::get().to(handlers::articles::list))
     })
-    .bind("127.0.0.1:8888")?
+    .bind(("127.0.0.1", 8000))?
     .run()
     .await
 }
