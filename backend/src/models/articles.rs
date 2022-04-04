@@ -1,10 +1,11 @@
 use {
+    super::from_model::FromModel,
     crate::{schema::articles, API_URL},
     diesel::{PgConnection, QueryDsl, RunQueryDsl},
-    serde::{Deserialize, Serialize},
+    serde::Serialize,
 };
 
-#[derive(Identifiable, Debug, Serialize, Deserialize, Queryable, Clone, AsChangeset)]
+#[derive(Identifiable, Debug, Serialize, Queryable, Clone, AsChangeset)]
 pub struct Article {
     pub id: i32,
     pub title: String,
@@ -15,7 +16,7 @@ pub struct Article {
     pub content: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize)]
 pub struct ArticleRepresentation {
     pub id: i32,
     pub title: String,
@@ -26,25 +27,27 @@ pub struct ArticleRepresentation {
     pub content: String,
 }
 
-impl Article {
-    fn into_representation(self) -> ArticleRepresentation {
+impl FromModel<Article> for ArticleRepresentation {
+    fn from_model(article: Article) -> ArticleRepresentation {
         ArticleRepresentation {
-            id: self.id,
-            title: self.title,
-            pub_date: self.pub_date,
-            published: self.published,
-            headline: self.headline,
-            image: API_URL.to_owned() + &self.image,
-            content: self.content,
+            id: article.id,
+            title: article.title,
+            pub_date: article.pub_date,
+            published: article.published,
+            headline: article.headline,
+            image: API_URL.to_owned() + &article.image,
+            content: article.content,
         }
     }
+}
 
+impl Article {
     pub fn get(
         id: &i32,
         connection: &PgConnection,
     ) -> Result<ArticleRepresentation, diesel::result::Error> {
         let article = articles::table.find(id).first::<Article>(connection)?;
-        Ok(article.into_representation())
+        Ok(ArticleRepresentation::from_model(article))
     }
 
     pub fn list(
@@ -55,7 +58,7 @@ impl Article {
             .expect("Could not load articles.");
         let results = articles
             .into_iter()
-            .map(|article| article.into_representation())
+            .map(ArticleRepresentation::from_model)
             .collect();
 
         Ok(results)
