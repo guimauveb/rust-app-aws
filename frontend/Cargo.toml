@@ -2,7 +2,7 @@
 name = "rust-app-frontend"
 version = "0.0.1"
 authors = ["guimauve <contact@guimauve.io>"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 yew = { rev="d1f15b6f862d555023c18a48c5fb154e539be22b", git = "https://github.com/yewstack/yew"}
